@@ -52,6 +52,15 @@ app.set("trust proxy", true); // respect X-Forwarded-* when behind a host proxy
 app.use(cors());
 app.use(express.json());
 
+// Never cache state endpoints: the UI polls /api/lockers and must always see
+// the live state. Without this, a CDN/browser cache can serve a stale "closed"
+// response after the locker has already been locked. Hashed static assets,
+// served later, keep their normal caching.
+app.use(["/api", "/lock", "/open"], (_req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 // List all lockers
 app.get("/api/lockers", (_req, res) => {
   res.json([...lockers.values()].map(publicLocker));

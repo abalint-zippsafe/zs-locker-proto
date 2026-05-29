@@ -73,7 +73,7 @@ export default function App() {
   const [secrets, setSecrets] = useState({}); // { [id]: { key, lockUrl } }
 
   async function refresh() {
-    const res = await fetch("/api/lockers");
+    const res = await fetch("/api/lockers", { cache: "no-store" });
     const data = await res.json();
     setLockers(data);
   }

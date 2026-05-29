@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: zs-locker-proto
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

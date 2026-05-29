@@ -32,15 +32,10 @@ function lanIp() {
 }
 const FALLBACK_BASE_URL = process.env.BASE_URL || `http://${lanIp()}:${PORT}`;
 
-// Build the base URL for QR codes. Prefer an explicit BASE_URL, otherwise use
-// the incoming request's host/proto (works behind a hosting proxy), and fall
-// back to the LAN IP for local use.
-function baseUrl(req) {
-  if (process.env.BASE_URL) return process.env.BASE_URL;
-  const host = req.get("host");
-  if (host) return `${req.protocol}://${host}`;
-  return FALLBACK_BASE_URL;
-}
+// The QR code points at the external proto page that handles the scan.
+// Override with PROTO_URL if it ever moves.
+const PROTO_URL =
+  process.env.PROTO_URL || "https://zipp-locker-zms.azurewebsites.net/proto";
 
 function publicLocker(l) {
   // Never expose the key in list responses; only return it right after closing.
@@ -74,7 +69,7 @@ app.post("/api/lockers/:id/close", (req, res) => {
   l.key = crypto.randomBytes(16).toString("hex");
   l.status = "closed";
 
-  const lockUrl = `${baseUrl(req)}/lock?id=${l.id}&key=${l.key}`;
+  const lockUrl = `${PROTO_URL}?key=${l.key}&id=${l.id}`;
   res.json({ id: l.id, status: l.status, key: l.key, lockUrl });
 });
 

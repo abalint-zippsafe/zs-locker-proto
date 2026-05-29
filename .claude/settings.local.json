@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(pnpm *)",
-      "PowerShell(gh *)",
-      "PowerShell(git *)"
-    ]
-  }
-}

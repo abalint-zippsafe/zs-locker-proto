@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.16.1",
   "scripts": {
     "dev": "concurrently -n server,web -c blue,green \"node server/index.js\" \"vite\"",
     "server": "node server/index.js",
